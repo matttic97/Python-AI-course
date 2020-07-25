@@ -2,6 +2,7 @@ import tensorflow as tf
 from tensorflow import keras
 import numpy as np
 import matplotlib.pyplot as plt
+import pickle
 
 data = keras.datasets.fashion_mnist
 
@@ -17,7 +18,7 @@ test_images = test_images / 255
 '''plt.imshow(train_images[8])
 plt.show()'''
 
-model = keras.Sequential([
+'''model = keras.Sequential([
     keras.layers.Flatten(input_shape = (28, 28)),
     keras.layers.Dense(128, activation = 'relu'),
     keras.layers.Dense(10, activation = 'softmax')
@@ -28,4 +29,17 @@ model.fit(train_images, train_labels, epochs = 10)
 
 test_loss, test_acc = model.evaluate(test_images, test_labels)
 
-print('Tested acc:', test_acc)
+# save model
+model.save('test_model')'''
+
+# load model
+model = keras.models.load_model('test_model')
+
+predictions = model.predict(test_images)
+
+for i in range(5):
+    plt.grid(False)
+    plt.imshow(test_images[i], cmap = plt.cm.binary)
+    plt.xlabel('Actual: ' + class_names[test_labels[i]])
+    plt.title('Prediction ' + class_names[np.argmax(predictions[i])])
+    plt.show()
